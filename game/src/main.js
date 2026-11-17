@@ -31,16 +31,22 @@ if (shotName) {
   let acc = 0;
   const DT = 1 / 60;
   function frame(now) {
-    const elapsed = Math.min(0.25, (now - last) / 1000);
-    last = now;
-    acc += elapsed;
-    let guard = 0;
-    while (acc >= DT && guard < 5) {
-      step(state, input, audio, DT);
-      acc -= DT;
-      guard++;
+    try {
+      const elapsed = Math.min(0.25, (now - last) / 1000);
+      last = now;
+      acc += elapsed;
+      let guard = 0;
+      while (acc >= DT && guard < 5) {
+        step(state, input, audio, DT);
+        acc -= DT;
+        guard++;
+      }
+      render(ctx, state, input);
+    } catch (err) {
+      // One bad frame must never kill the game: log it loudly and keep
+      // the loop running so the player can keep playing / restart.
+      console.error('[dockmaster] frame error (loop kept alive):', err);
     }
-    render(ctx, state, input);
     requestAnimationFrame(frame);
   }
   // First user gesture unlocks audio (browsers block it before that).

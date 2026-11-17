@@ -421,7 +421,7 @@ export function step(state, input, audio, dt) {
     for (let i = 0; i < input.clickRects.length; i++) {
       const r = input.clickRects[i];
       if (r.kind === 'difficulty' && input.consumeClick(r)) {
-        state.difficulty = DIFFICULTIES_ORDER[i] || state.difficulty;
+        state.difficulty = DIFFICULTY_ORDER[i] || state.difficulty;
         audio.sfx('click');
       }
       if (r.kind === 'start' && input.consumeClick(r)) {
